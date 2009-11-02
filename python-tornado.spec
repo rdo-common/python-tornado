@@ -1,0 +1,99 @@
+%{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
+%global pkgname tornado
+
+Name:           python-%{pkgname}
+Version:        0.2
+Release:        3%{?dist}
+Summary:        Scalable, non-blocking web server and tools
+
+Group:          Development/Libraries
+License:        ASL 2.0
+URL:            http://www.tornadoweb.org
+Source0:        http://www.tornadoweb.org/static/%{pkgname}-%{version}.tar.gz
+BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+BuildArch:      noarch
+
+BuildRequires:  python-devel
+Requires:       python-pycurl
+Requires:       python-simplejson
+
+%description
+Tornado is an open source version of the scalable, non-blocking web server and
+and tools.
+
+The framework is distinct from most mainstream web server frameworks (and
+certainly most Python frameworks) because it is non-blocking and reasonably
+fast. Because it is non-blocking and uses epoll, it can handle thousands of
+simultaneous standing connections, which means it is ideal for real-time web
+services.
+
+%package doc
+Summary:        Examples for python-tornado
+Group:          Documentation
+Requires:       python-tornado = %{version}-%{release}
+
+%description doc
+Tornado is an open source version of the scalable, non-blocking web server and
+and tools. This package contains some example applications.
+
+%prep 
+%setup -q -n %{pkgname}-%{version}
+
+# remove shebang from files
+for File in `find %{pkgname} -name "*py"`; do
+    %{__sed} -i.orig -e 1d ${File}
+    touch -r ${File}.orig ${File}
+    %{__rm} ${File}.orig
+done
+
+# spurious permission fix
+%{__chmod} -x demos/*/*py
+%{__chmod} -x demos/*/*/*py
+%{__chmod} -x demos/*/*/*/*py
+
+# remove empty file
+rm -rf demos/facebook/static/facebook.js
+
+%build
+python setup.py build
+
+
+%install
+rm -rf %{buildroot}
+
+PATH=$PATH:%{buildroot}%{python_sitelib}/%{pkgname}
+python setup.py install --root=%{buildroot}
+
+
+%clean
+rm -rf %{buildroot}
+
+
+%files
+%defattr(-,root,root,-)
+%doc README PKG-INFO
+
+%{python_sitelib}/%{pkgname}/
+%{python_sitelib}/%{pkgname}-%{version}-*.egg-info
+
+%files doc
+%defattr(-,root,root,-)
+%doc demos
+
+%changelog
+* Wed Oct 21 2009 Ionuț Arțăriși <mapleoin@fedoraproject.org> - 0.2-3
+- changed -doc package group to Documentation
+- use global instead of define
+
+* Tue Oct 20 2009 Ionuț Arțăriși <mapleoin@fedoraproject.org> - 0.2-2
+- create -doc package for examples
+- altered description to not include references to FriendFeed
+- rename to python-tornado
+
+* Fri Sep 25 2009 Ionuț Arțăriși <mapleoin@lavabit.com> - 0.2-1
+- New upstream version
+- Fixed macro usage and directory ownership in spec
+
+* Thu Sep 10 2009 Ionuț Arțăriși <mapleoin@lavabit.com> - 0.1-1
+- Initial release
+
