@@ -3,7 +3,7 @@
 
 Name:           python-%{pkgname}
 Version:        0.2
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Scalable, non-blocking web server and tools
 
 Group:          Development/Libraries
@@ -81,6 +81,9 @@ rm -rf %{buildroot}
 %doc demos
 
 %changelog
+* Thu Jul 22 2010 David Malcolm <dmalcolm@redhat.com> - 0.2-4
+- Rebuilt for https://fedoraproject.org/wiki/Features/Python_2.7/MassRebuild
+
 * Wed Oct 21 2009 Ionuț Arțăriși <mapleoin@fedoraproject.org> - 0.2-3
 - changed -doc package group to Documentation
 - use global instead of define
