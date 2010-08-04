@@ -2,8 +2,8 @@
 %global pkgname tornado
 
 Name:           python-%{pkgname}
-Version:        0.2
-Release:        4%{?dist}
+Version:        1.0
+Release:        1%{?dist}
 Summary:        Scalable, non-blocking web server and tools
 
 Group:          Development/Libraries
@@ -46,13 +46,6 @@ for File in `find %{pkgname} -name "*py"`; do
     %{__rm} ${File}.orig
 done
 
-# spurious permission fix
-%{__chmod} -x demos/*/*py
-%{__chmod} -x demos/*/*/*py
-%{__chmod} -x demos/*/*/*/*py
-
-# remove empty file
-rm -rf demos/facebook/static/facebook.js
 
 %build
 python setup.py build
@@ -81,6 +74,10 @@ rm -rf %{buildroot}
 %doc demos
 
 %changelog
+* Wed Aug  4 2010 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 1.0-1
+- new upstream release 1.0
+- there's no longer a problem with spurious permissions, so remove that fix
+
 * Thu Jul 22 2010 David Malcolm <dmalcolm@redhat.com> - 0.2-4
 - Rebuilt for https://fedoraproject.org/wiki/Features/Python_2.7/MassRebuild
 
