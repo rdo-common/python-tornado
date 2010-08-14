@@ -2,14 +2,14 @@
 %global pkgname tornado
 
 Name:           python-%{pkgname}
-Version:        0.2
-Release:        3%{?dist}
+Version:        1.0.1
+Release:        1%{?dist}
 Summary:        Scalable, non-blocking web server and tools
 
 Group:          Development/Libraries
 License:        ASL 2.0
 URL:            http://www.tornadoweb.org
-Source0:        http://www.tornadoweb.org/static/%{pkgname}-%{version}.tar.gz
+Source0:        http://github.com/downloads/facebook/%{pkgname}/%{pkgname}-%{version}.tar.gz 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:      noarch
 
@@ -81,6 +81,9 @@ rm -rf %{buildroot}
 %doc demos
 
 %changelog
+* Sat Aug 14 2010 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 1.0.1-1
+- new upstream release 1.0.1
+
 * Wed Oct 21 2009 Ionuț Arțăriși <mapleoin@fedoraproject.org> - 0.2-3
 - changed -doc package group to Documentation
 - use global instead of define
