@@ -46,14 +46,6 @@ for File in `find %{pkgname} -name "*py"`; do
     %{__rm} ${File}.orig
 done
 
-# spurious permission fix
-%{__chmod} -x demos/*/*py
-%{__chmod} -x demos/*/*/*py
-%{__chmod} -x demos/*/*/*/*py
-
-# remove empty file
-rm -rf demos/facebook/static/facebook.js
-
 %build
 python setup.py build
 
@@ -83,6 +75,7 @@ rm -rf %{buildroot}
 %changelog
 * Sat Aug 14 2010 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 1.0.1-1
 - new upstream release 1.0.1
+- remove spurious permission fix
 
 * Wed Oct 21 2009 Ionuț Arțăriși <mapleoin@fedoraproject.org> - 0.2-3
 - changed -doc package group to Documentation
