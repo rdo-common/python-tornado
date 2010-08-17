@@ -2,14 +2,14 @@
 %global pkgname tornado
 
 Name:           python-%{pkgname}
-Version:        1.0
-Release:        2%{?dist}
+Version:        1.0.1
+Release:        1%{?dist}
 Summary:        Scalable, non-blocking web server and tools
 
 Group:          Development/Libraries
 License:        ASL 2.0
 URL:            http://www.tornadoweb.org
-Source0:        http://github.com/downloads/facebook/${pkgname}/%{pkgname}-%{version}.tar.gz
+Source0:        http://github.com/downloads/facebook/%{pkgname}/%{pkgname}-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:      noarch
 
@@ -74,6 +74,9 @@ rm -rf %{buildroot}
 %doc demos
 
 %changelog
+* Tue Aug 17 2010 Ionuț Arțăriși <mapleoin@fedoraproject.org> - 1.0.1-1
+- new upstream bugfix release: 1.0.1
+
 * Wed Aug  4 2010 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 1.0-2
 - changed upstream source url
 
