@@ -2,7 +2,7 @@
 %global pkgname tornado
 
 Name:           python-%{pkgname}
-Version:        1.0.1
+Version:        1.1
 Release:        1%{?dist}
 Summary:        Scalable, non-blocking web server and tools
 
@@ -74,6 +74,9 @@ rm -rf %{buildroot}
 %doc demos
 
 %changelog
+* Wed Sep  8 2010 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 1.1-1
+- new upstream release 1.1
+
 * Tue Aug 17 2010 Ionuț Arțăriși <mapleoin@fedoraproject.org> - 1.0.1-1
 - new upstream bugfix release: 1.0.1
 
