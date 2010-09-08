@@ -2,14 +2,14 @@
 %global pkgname tornado
 
 Name:           python-%{pkgname}
-Version:        1.0.1
+Version:        1.1
 Release:        1%{?dist}
 Summary:        Scalable, non-blocking web server and tools
 
 Group:          Development/Libraries
 License:        ASL 2.0
 URL:            http://www.tornadoweb.org
-Source0:        http://github.com/downloads/facebook/%{pkgname}/%{pkgname}-%{version}.tar.gz 
+Source0:        http://github.com/downloads/facebook/%{pkgname}/%{pkgname}-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:      noarch
 
@@ -46,6 +46,7 @@ for File in `find %{pkgname} -name "*py"`; do
     %{__rm} ${File}.orig
 done
 
+
 %build
 python setup.py build
 
@@ -73,9 +74,21 @@ rm -rf %{buildroot}
 %doc demos
 
 %changelog
-* Sat Aug 14 2010 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 1.0.1-1
-- new upstream release 1.0.1
-- remove spurious permission fix
+* Wed Sep  8 2010 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 1.1-1
+- new upstream release 1.1
+
+* Tue Aug 17 2010 Ionuț Arțăriși <mapleoin@fedoraproject.org> - 1.0.1-1
+- new upstream bugfix release: 1.0.1
+
+* Wed Aug  4 2010 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 1.0-2
+- changed upstream source url
+
+* Wed Aug  4 2010 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 1.0-1
+- new upstream release 1.0
+- there's no longer a problem with spurious permissions, so remove that fix
+
+* Thu Jul 22 2010 David Malcolm <dmalcolm@redhat.com> - 0.2-4
+- Rebuilt for https://fedoraproject.org/wiki/Features/Python_2.7/MassRebuild
 
 * Wed Oct 21 2009 Ionuț Arțăriși <mapleoin@fedoraproject.org> - 0.2-3
 - changed -doc package group to Documentation
