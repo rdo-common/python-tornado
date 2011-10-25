@@ -2,7 +2,7 @@
 %global pkgname tornado
 
 Name:           python-%{pkgname}
-Version:        1.2.1
+Version:        2.1.1
 Release:        1%{?dist}
 Summary:        Scalable, non-blocking web server and tools
 
@@ -18,14 +18,14 @@ Requires:       python-pycurl
 Requires:       python-simplejson
 
 %description
-Tornado is an open source version of the scalable, non-blocking web server and
-and tools.
+Tornado is an open source version of the scalable, non-blocking web
+server and tools.
 
-The framework is distinct from most mainstream web server frameworks (and
-certainly most Python frameworks) because it is non-blocking and reasonably
-fast. Because it is non-blocking and uses epoll, it can handle thousands of
-simultaneous standing connections, which means it is ideal for real-time web
-services.
+The framework is distinct from most mainstream web server frameworks
+(and certainly most Python frameworks) because it is non-blocking and
+reasonably fast. Because it is non-blocking and uses epoll, it can
+handle thousands of simultaneous standing connections, which means it is
+ideal for real-time web services.
 
 %package doc
 Summary:        Examples for python-tornado
@@ -74,6 +74,10 @@ rm -rf %{buildroot}
 %doc demos
 
 %changelog
+* Tue Oct 25 2011 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 2.1.1-1
+- new upstream version 2.1.1
+- remove double word in description and rearrange it (#715272)
+
 * Tue Mar 29 2011 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 1.2.1-1
 - new upstream version 1.2.1
 
