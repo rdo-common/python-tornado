@@ -33,18 +33,14 @@ Group:          Documentation
 Requires:       python-tornado = %{version}-%{release}
 
 %description doc
-Tornado is an open source version of the scalable, non-blocking web server and
-and tools. This package contains some example applications.
+Tornado is an open source version of the scalable, non-blocking web
+server and and tools. This package contains some example applications.
 
 %prep 
 %setup -q -n %{pkgname}-%{version}
 
 # remove shebang from files
-for File in `find %{pkgname} -name "*py"`; do
-    %{__sed} -i.orig -e 1d ${File}
-    touch -r ${File}.orig ${File}
-    %{__rm} ${File}.orig
-done
+%{__sed} -i.orig -e '/^#!\//, 1d' *py tornado/*.py tornado/*/*.py
 
 
 %build
@@ -61,6 +57,8 @@ python setup.py install --root=%{buildroot}
 %clean
 rm -rf %{buildroot}
 
+%check
+python -m unittest discover -s tornado/test -p *test.py
 
 %files
 %defattr(-,root,root,-)
@@ -73,10 +71,13 @@ rm -rf %{buildroot}
 %defattr(-,root,root,-)
 %doc demos
 
+
 %changelog
 * Tue Oct 25 2011 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 2.1.1-1
 - new upstream version 2.1.1
 - remove double word in description and rearrange it (#715272)
+- fixed removal of shebangs
+- added %check section to run unittests during package build
 
 * Tue Mar 29 2011 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 1.2.1-1
 - new upstream version 1.2.1
