@@ -58,7 +58,9 @@ python setup.py install --root=%{buildroot}
 rm -rf %{buildroot}
 
 %check
-python -m unittest discover -s tornado/test -p *test.py
+%if "%{dist}" != "el6"
+    python -m unittest discover -s tornado/test -p *test.py
+%endif
 
 %files
 %defattr(-,root,root,-)
