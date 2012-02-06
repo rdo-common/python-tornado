@@ -1,9 +1,14 @@
-%{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
+%if 0%{?fedora} > 12 || 0%{?rhel} > 6
+%global with_python3 1
+%else
+%{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print (get_python_lib())")}
+%endif
+
 %global pkgname tornado
 
 Name:           python-%{pkgname}
 Version:        2.1.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Scalable, non-blocking web server and tools
 
 Group:          Development/Libraries
@@ -16,6 +21,12 @@ BuildArch:      noarch
 BuildRequires:  python-devel
 Requires:       python-pycurl
 Requires:       python-simplejson
+%if 0%{?with_python3}
+BuildRequires:  python-tools
+BuildRequires:  python3-setuptools
+BuildRequires:  python3-devel
+Requires:       python3-simplejson
+%endif
 
 %description
 Tornado is an open source version of the scalable, non-blocking web
@@ -36,19 +47,62 @@ Requires:       python-tornado = %{version}-%{release}
 Tornado is an open source version of the scalable, non-blocking web
 server and and tools. This package contains some example applications.
 
+%if 0%{?with_python3}
+%package -n python3-tornado
+Summary:        Scalable, non-blocking web server and tools
+%description -n python3-tornado
+Tornado is an open source version of the scalable, non-blocking web
+server and tools.
+
+The framework is distinct from most mainstream web server frameworks
+(and certainly most Python frameworks) because it is non-blocking and
+reasonably fast. Because it is non-blocking and uses epoll, it can
+handle thousands of simultaneous standing connections, which means it is
+ideal for real-time web services.
+
+%package -n python3-tornado-doc
+Summary:        Examples for python-tornado
+Group:          Documentation
+Requires:       python3-tornado = %{version}-%{release}
+
+%description -n python3-tornado-doc
+Tornado is an open source version of the scalable, non-blocking web
+server and and tools. This package contains some example applications.
+
+%endif # with_python3
+
 %prep 
 %setup -q -n %{pkgname}-%{version}
 
 # remove shebang from files
 %{__sed} -i.orig -e '/^#!\//, 1d' *py tornado/*.py tornado/*/*.py
 
+%if 0%{?with_python3}
+rm -rf %{py3dir}
+cp -a . %{py3dir}
+find %{py3dir} -name '*.py' | xargs sed -i '1s|^#!python|#!%{__python3}|'
+2to3 --write --nobackups %{py3dir}
+%endif # with_python3
 
 %build
+%if 0%{?with_python3}
+pushd %{py3dir}
+    python3 setup.py build
+popd
+%endif # with_python3
+
 python setup.py build
 
 
 %install
 rm -rf %{buildroot}
+
+%if 0%{?with_python3}
+pushd %{py3dir}
+    PATH=$PATH:%{buildroot}%{python3_sitelib}/%{pkgname}
+    python3 setup.py install --root=%{buildroot}
+popd
+%endif # with_python3
 
 PATH=$PATH:%{buildroot}%{python_sitelib}/%{pkgname}
 python setup.py install --root=%{buildroot}
@@ -59,6 +113,11 @@ rm -rf %{buildroot}
 
 %check
 %if "%{dist}" != "el6"
+    %if 0%{?with_python3}
+    pushd %{py3dir}
+        python3 -m unittest discover -s tornado/test -p *test.py || :
+    popd
+    %endif # with_python3
     python -m unittest discover -s tornado/test -p *test.py
 %endif
 
@@ -73,8 +132,24 @@ rm -rf %{buildroot}
 %defattr(-,root,root,-)
 %doc demos
 
+%if 0%{?with_python3}
+%files -n python3-tornado
+%defattr(-,root,root,-)
+%doc README PKG-INFO
+
+%{python3_sitelib}/%{pkgname}/
+%{python3_sitelib}/%{pkgname}-%{version}-*.egg-info
+
+%files -n python3-tornado-doc
+%defattr(-,root,root,-)
+%doc demos
+%endif
+
 
 %changelog
+* Fri Jan 27 2012 Thomas Spura <tomspur@fedoraproject.org> - 2.1.1-3
+- build python3 package
+
 * Sat Jan 14 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.1.1-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
 
