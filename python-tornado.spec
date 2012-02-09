@@ -7,8 +7,8 @@
 %global pkgname tornado
 
 Name:           python-%{pkgname}
-Version:        2.1.1
-Release:        4%{?dist}
+Version:        2.2
+Release:        1%{?dist}
 Summary:        Scalable, non-blocking web server and tools
 
 Group:          Development/Libraries
@@ -146,6 +146,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Thu Feb 9 2012 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 2.2-1
+- upgrade to upstream release 2.2
+
 * Thu Feb 9 2012 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 2.1.1-4
 - remove python3-simplejson dependency
 
