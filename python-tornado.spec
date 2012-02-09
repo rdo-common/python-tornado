@@ -8,7 +8,7 @@
 
 Name:           python-%{pkgname}
 Version:        2.1.1
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Scalable, non-blocking web server and tools
 
 Group:          Development/Libraries
@@ -25,7 +25,6 @@ Requires:       python-simplejson
 BuildRequires:  python-tools
 BuildRequires:  python3-setuptools
 BuildRequires:  python3-devel
-Requires:       python3-simplejson
 %endif
 
 %description
@@ -147,6 +146,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Thu Feb 9 2012 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 2.1.1-4
+- remove python3-simplejson dependency
+
 * Fri Jan 27 2012 Thomas Spura <tomspur@fedoraproject.org> - 2.1.1-3
 - build python3 package
 
