@@ -7,7 +7,7 @@
 %global pkgname tornado
 
 Name:           python-%{pkgname}
-Version:        2.2
+Version:        2.2.1
 Release:        1%{?dist}
 Summary:        Scalable, non-blocking web server and tools
 
@@ -111,7 +111,7 @@ python setup.py install --root=%{buildroot}
 rm -rf %{buildroot}
 
 %check
-%if "%{dist}" != "el6"
+%if "%{dist}" != ".el6"
     %if 0%{?with_python3}
     pushd %{py3dir}
         python3 -m unittest discover -s tornado/test -p *test.py || :
@@ -146,6 +146,10 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Sun May 20 2012 Thomas Spura <tomspur@fedoraproject.org> - 2.2.1-1
+- update to upstream release 2.2.1 (fixes CVE-2012-2374)
+- fix typo for epel6 macro bug #822972 (Florian La Roche)
+
 * Thu Feb 9 2012 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 2.2-1
 - upgrade to upstream release 2.2
 
