@@ -8,7 +8,7 @@
 
 Name:           python-%{pkgname}
 Version:        2.2.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Scalable, non-blocking web server and tools
 
 Group:          Development/Libraries
@@ -146,6 +146,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Sat Jul 21 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.2.1-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
+
 * Sun May 20 2012 Thomas Spura <tomspur@fedoraproject.org> - 2.2.1-1
 - update to upstream release 2.2.1 (fixes CVE-2012-2374)
 - fix typo for epel6 macro bug #822972 (Florian La Roche)
