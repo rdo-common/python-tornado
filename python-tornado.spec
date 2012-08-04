@@ -8,7 +8,7 @@
 
 Name:           python-%{pkgname}
 Version:        2.2.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Scalable, non-blocking web server and tools
 
 Group:          Development/Libraries
@@ -146,6 +146,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Sat Aug 04 2012 David Malcolm <dmalcolm@redhat.com> - 2.2.1-3
+- rebuild for https://fedoraproject.org/wiki/Features/Python_3.3
+
 * Sat Jul 21 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.2.1-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
 
