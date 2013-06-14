@@ -1,4 +1,4 @@
-%if 0%{?fedora} > 12 || 0%{?rhel} > 6
+%if 0%{?fedora} > 12
 %global with_python3 1
 %else
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print (get_python_lib())")}
@@ -8,7 +8,7 @@
 
 Name:           python-%{pkgname}
 Version:        2.2.1
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Scalable, non-blocking web server and tools
 
 Group:          Development/Libraries
@@ -146,6 +146,10 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Fri Jun 14 2013 Thomas Spura <tomspur@fedoraproject.org> - 2.2.1-5
+- remove rhel conditional for with_python3:
+  https://fedorahosted.org/fpc/ticket/200
+
 * Thu Feb 14 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.2.1-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
 
