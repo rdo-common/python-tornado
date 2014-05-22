@@ -7,18 +7,19 @@
 %global pkgname tornado
 
 Name:           python-%{pkgname}
-Version:        2.2.1
-Release:        7%{?dist}
+Version:        3.2.1
+Release:        1%{?dist}
 Summary:        Scalable, non-blocking web server and tools
 
 Group:          Development/Libraries
 License:        ASL 2.0
 URL:            http://www.tornadoweb.org
-Source0:        http://github.com/downloads/facebook/%{pkgname}/%{pkgname}-%{version}.tar.gz
+Source0:        https://pypi.python.org/packages/source/t/tornado/tornado-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-BuildArch:      noarch
 
 BuildRequires:  python-devel
+BuildRequires:  python-backports-ssl_match_hostname
+Requires:       python-backports-ssl_match_hostname
 Requires:       python-pycurl
 Requires:       python-simplejson
 %if 0%{?with_python3}
@@ -114,18 +115,20 @@ rm -rf %{buildroot}
 %if "%{dist}" != ".el6"
     %if 0%{?with_python3}
     pushd %{py3dir}
-        python3 -m unittest discover -s tornado/test -p *test.py || :
+        PYTHONPATH=%{python3_sitelib} \
+        python3 -m tornado.test.runtests --verbose || :
     popd
     %endif # with_python3
-    python -m unittest discover -s tornado/test -p *test.py
+    PYTHONPATH=%{python_sitelib} \
+    python -m tornado.test.runtests --verbose
 %endif
 
 %files
 %defattr(-,root,root,-)
-%doc README PKG-INFO
+%doc README.rst PKG-INFO
 
-%{python_sitelib}/%{pkgname}/
-%{python_sitelib}/%{pkgname}-%{version}-*.egg-info
+%{python_sitearch}/%{pkgname}/
+%{python_sitearch}/%{pkgname}-%{version}-*.egg-info
 
 %files doc
 %defattr(-,root,root,-)
@@ -134,10 +137,10 @@ rm -rf %{buildroot}
 %if 0%{?with_python3}
 %files -n python3-tornado
 %defattr(-,root,root,-)
-%doc README PKG-INFO
+%doc README.rst PKG-INFO
 
-%{python3_sitelib}/%{pkgname}/
-%{python3_sitelib}/%{pkgname}-%{version}-*.egg-info
+%{python3_sitearch}/%{pkgname}/
+%{python3_sitearch}/%{pkgname}-%{version}-*.egg-info
 
 %files -n python3-tornado-doc
 %defattr(-,root,root,-)
@@ -146,6 +149,10 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Thu May 22 2014 Thomas Spura <tomspur@fedoraproject.org> - 3.2.1-1
+- update to 3.2.1
+- no noarch anymore
+
 * Wed May 14 2014 Bohuslav Kabrda <bkabrda@redhat.com> - 2.2.1-7
 - Rebuilt for https://fedoraproject.org/wiki/Changes/Python_3.4
 
