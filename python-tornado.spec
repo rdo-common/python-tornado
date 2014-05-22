@@ -192,7 +192,7 @@ rm -rf %{buildroot}
 - new upstream version 2.1.1
 - remove double word in description and rearrange it (#715272)
 - fixed removal of shebangs
-- added %check section to run unittests during package build
+- added %%check section to run unittests during package build
 
 * Tue Mar 29 2011 Ionuț C. Arțăriși <mapleoin@fedoraproject.org> - 1.2.1-1
 - new upstream version 1.2.1
