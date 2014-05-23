@@ -82,6 +82,17 @@ rm -rf %{py3dir}
 cp -a . %{py3dir}
 find %{py3dir} -name '*.py' | xargs sed -i '1s|^#!python|#!%{__python3}|'
 2to3 --write --nobackups %{py3dir}
+pushd %{py3dir}
+    # add __future__.division/print_function to testfile as 2to3 strips it off
+    mv tornado/test/template_test.py tornado/test/template_test.py.orig
+    echo "from __future__ import division" > tornado/test/template_test.py
+    cat tornado/test/template_test.py.orig >> tornado/test/template_test.py
+    touch -r tornado/test/template_test.py.orig tornado/test/template_test.py
+    mv tornado/test/util_test.py tornado/test/util_test.py.orig
+    echo "from __future__ import print_function" > tornado/test/util_test.py
+    cat tornado/test/util_test.py.orig >> tornado/test/util_test.py
+    touch -r tornado/test/util_test.py.orig tornado/test/util_test.py
+popd
 %endif # with_python3
 
 %build
