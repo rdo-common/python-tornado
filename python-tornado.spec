@@ -1,7 +1,7 @@
 %if 0%{?fedora} > 12
 %global with_python3 1
 %else
-%{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print (get_python_lib())")}
+%{!?python_sitearch: %global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print (get_python_lib())")}
 %endif
 
 %global pkgname tornado
@@ -99,12 +99,12 @@ rm -rf %{buildroot}
 
 %if 0%{?with_python3}
 pushd %{py3dir}
-    PATH=$PATH:%{buildroot}%{python3_sitelib}/%{pkgname}
+    PATH=$PATH:%{buildroot}%{python3_sitearch}/%{pkgname}
     python3 setup.py install --root=%{buildroot}
 popd
 %endif # with_python3
 
-PATH=$PATH:%{buildroot}%{python_sitelib}/%{pkgname}
+PATH=$PATH:%{buildroot}%{python_sitearch}/%{pkgname}
 python setup.py install --root=%{buildroot}
 
 
@@ -115,11 +115,11 @@ rm -rf %{buildroot}
 %if "%{dist}" != ".el6"
     %if 0%{?with_python3}
     pushd %{py3dir}
-        PYTHONPATH=%{python3_sitelib} \
+        PYTHONPATH=%{python3_sitearch} \
         python3 -m tornado.test.runtests --verbose || :
     popd
     %endif # with_python3
-    PYTHONPATH=%{python_sitelib} \
+    PYTHONPATH=%{python_sitearch} \
     python -m tornado.test.runtests --verbose
 %endif
 
