@@ -135,26 +135,22 @@ rm -rf %{buildroot}
 %endif
 
 %files
-%defattr(-,root,root,-)
 %doc README.rst PKG-INFO
 
 %{python_sitearch}/%{pkgname}/
 %{python_sitearch}/%{pkgname}-%{version}-*.egg-info
 
 %files doc
-%defattr(-,root,root,-)
 %doc demos
 
 %if 0%{?with_python3}
 %files -n python3-tornado
-%defattr(-,root,root,-)
 %doc README.rst PKG-INFO
 
 %{python3_sitearch}/%{pkgname}/
 %{python3_sitearch}/%{pkgname}-%{version}-*.egg-info
 
 %files -n python3-tornado-doc
-%defattr(-,root,root,-)
 %doc demos
 %endif
 
@@ -163,6 +159,7 @@ rm -rf %{buildroot}
 * Thu May 22 2014 Thomas Spura <tomspur@fedoraproject.org> - 3.2.1-1
 - update to 3.2.1
 - no noarch anymore
+- remove defattr
 
 * Wed May 14 2014 Bohuslav Kabrda <bkabrda@redhat.com> - 2.2.1-7
 - Rebuilt for https://fedoraproject.org/wiki/Changes/Python_3.4
