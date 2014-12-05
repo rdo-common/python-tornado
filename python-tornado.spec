@@ -8,20 +8,18 @@
 
 Name:           python-%{pkgname}
 Version:        3.2.1
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Scalable, non-blocking web server and tools
 
 Group:          Development/Libraries
 License:        ASL 2.0
 URL:            http://www.tornadoweb.org
 Source0:        https://pypi.python.org/packages/source/t/tornado/tornado-%{version}.tar.gz
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  python-devel
 BuildRequires:  python-backports-ssl_match_hostname
 Requires:       python-backports-ssl_match_hostname
 Requires:       python-pycurl
-Requires:       python-simplejson
 %if 0%{?with_python3}
 BuildRequires:  python-tools
 BuildRequires:  python3-setuptools
@@ -106,8 +104,6 @@ python setup.py build
 
 
 %install
-rm -rf %{buildroot}
-
 %if 0%{?with_python3}
 pushd %{py3dir}
     PATH=$PATH:%{buildroot}%{python3_sitearch}/%{pkgname}
@@ -118,9 +114,6 @@ popd
 PATH=$PATH:%{buildroot}%{python_sitearch}/%{pkgname}
 python setup.py install --root=%{buildroot}
 
-
-%clean
-rm -rf %{buildroot}
 
 %check
 %if "%{dist}" != ".el6"
@@ -156,6 +149,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Fri Dec 5 2014 Orion Poplawski <orion@cora.nwra.com> - 3.2.1-4
+- Drop requires python-simplejson
+
 * Sun Aug 17 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 3.2.1-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
 
