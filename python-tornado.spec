@@ -1,27 +1,26 @@
-%if 0%{?fedora} > 12
+%if 0%{?fedora}
 %global with_python3 1
-%else
-%{!?python_sitearch: %global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print (get_python_lib())")}
 %endif
 
 %global pkgname tornado
 
 Name:           python-%{pkgname}
-Version:        3.2.1
-Release:        4%{?dist}
+Version:        4.1
+Release:        1%{?dist}
 Summary:        Scalable, non-blocking web server and tools
 
 Group:          Development/Libraries
 License:        ASL 2.0
 URL:            http://www.tornadoweb.org
 Source0:        https://pypi.python.org/packages/source/t/tornado/tornado-%{version}.tar.gz
+# Patch to use system CA certs instead of certifi
+Patch0:         python-tornado-cert.patch
 
-BuildRequires:  python-devel
+BuildRequires:  python2-devel
 BuildRequires:  python-backports-ssl_match_hostname
 Requires:       python-backports-ssl_match_hostname
 Requires:       python-pycurl
 %if 0%{?with_python3}
-BuildRequires:  python-tools
 BuildRequires:  python3-setuptools
 BuildRequires:  python3-devel
 %endif
@@ -70,85 +69,85 @@ server and and tools. This package contains some example applications.
 %endif # with_python3
 
 %prep 
-%setup -q -n %{pkgname}-%{version}
-
+%setup -qc 
+mv %{pkgname}-%{version} python2
+pushd python2
+%patch0 -p1 -b .cert
 # remove shebang from files
 %{__sed} -i.orig -e '/^#!\//, 1d' *py tornado/*.py tornado/*/*.py
+popd
 
 %if 0%{?with_python3}
-rm -rf %{py3dir}
-cp -a . %{py3dir}
-find %{py3dir} -name '*.py' | xargs sed -i '1s|^#!python|#!%{__python3}|'
-2to3 --write --nobackups %{py3dir}
-pushd %{py3dir}
-    # add __future__.division/print_function to testfile as 2to3 strips it off
-    mv tornado/test/template_test.py tornado/test/template_test.py.orig
-    echo "from __future__ import division" > tornado/test/template_test.py
-    cat tornado/test/template_test.py.orig >> tornado/test/template_test.py
-    touch -r tornado/test/template_test.py.orig tornado/test/template_test.py
-    mv tornado/test/util_test.py tornado/test/util_test.py.orig
-    echo "from __future__ import print_function" > tornado/test/util_test.py
-    cat tornado/test/util_test.py.orig >> tornado/test/util_test.py
-    touch -r tornado/test/util_test.py.orig tornado/test/util_test.py
-popd
+cp -a python2 python3
+find python3 -name '*.py' | xargs sed -i '1s|^#!.*python|#!%{__python3}|'
 %endif # with_python3
 
 %build
 %if 0%{?with_python3}
-pushd %{py3dir}
-    python3 setup.py build
+pushd python3
+    %{__python3} setup.py build
 popd
 %endif # with_python3
 
-python setup.py build
+pushd python2
+    %{__python2} setup.py build
+popd
 
 
 %install
 %if 0%{?with_python3}
-pushd %{py3dir}
+pushd python3
     PATH=$PATH:%{buildroot}%{python3_sitearch}/%{pkgname}
-    python3 setup.py install --root=%{buildroot}
+    %{__python3} setup.py install --root=%{buildroot}
 popd
 %endif # with_python3
 
-PATH=$PATH:%{buildroot}%{python_sitearch}/%{pkgname}
-python setup.py install --root=%{buildroot}
+pushd python2
+    PATH=$PATH:%{buildroot}%{python2_sitearch}/%{pkgname}
+    %{__python2} setup.py install --root=%{buildroot}
+popd
 
 
 %check
 %if "%{dist}" != ".el6"
     %if 0%{?with_python3}
-    pushd %{py3dir}
+    pushd python3
         PYTHONPATH=%{python3_sitearch} \
-        python3 -m tornado.test.runtests --verbose || :
+        %{__python3} -m tornado.test.runtests --verbose
     popd
     %endif # with_python3
-    PYTHONPATH=%{python_sitearch} \
-    python -m tornado.test.runtests --verbose
+    pushd python2
+        PYTHONPATH=%{python2_sitearch} \
+        %{__python2} -m tornado.test.runtests --verbose
+    popd
 %endif
 
 %files
-%doc README.rst PKG-INFO
+%doc python2/README.rst python2/PKG-INFO
 
-%{python_sitearch}/%{pkgname}/
-%{python_sitearch}/%{pkgname}-%{version}-*.egg-info
+%{python2_sitearch}/%{pkgname}/
+%{python2_sitearch}/%{pkgname}-%{version}-*.egg-info
 
 %files doc
-%doc demos
+%doc python2/demos
 
 %if 0%{?with_python3}
 %files -n python3-tornado
-%doc README.rst PKG-INFO
+%doc python3/README.rst python3/PKG-INFO
 
 %{python3_sitearch}/%{pkgname}/
 %{python3_sitearch}/%{pkgname}-%{version}-*.egg-info
 
 %files -n python3-tornado-doc
-%doc demos
+%doc python3/demos
 %endif
 
 
 %changelog
+* Sun Mar 1 2015 Orion Poplawski <orion@cora.nwra.com> - 4.1-1
+- Update to 4.1
+- Modernize spec
+
 * Fri Dec 5 2014 Orion Poplawski <orion@cora.nwra.com> - 3.2.1-4
 - Drop requires python-simplejson
 
