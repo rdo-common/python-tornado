@@ -1,0 +1,42 @@
+diff -up ./tornado/simple_httpclient.py.cert ./tornado/simple_httpclient.py
+--- ./tornado/simple_httpclient.py.cert	2015-03-02 19:26:31.840455222 -0700
++++ ./tornado/simple_httpclient.py	2015-03-02 19:27:44.833403497 -0700
+@@ -32,17 +32,8 @@ except ImportError:
+     # ssl is not available on Google App Engine.
+     ssl = None
+ 
+-try:
+-    import certifi
+-except ImportError:
+-    certifi = None
+-
+-
+ def _default_ca_certs():
+-    if certifi is None:
+-        raise Exception("The 'certifi' package is required to use https "
+-                        "in simple_httpclient")
+-    return certifi.where()
++    return '/etc/pki/tls/cert.pem'
+ 
+ 
+ class SimpleAsyncHTTPClient(AsyncHTTPClient):
+diff -up ./tornado/test/iostream_test.py.cert ./tornado/test/iostream_test.py
+--- ./tornado/test/iostream_test.py.cert	2015-03-02 19:26:31.889456050 -0700
++++ ./tornado/test/iostream_test.py	2015-03-02 19:28:00.791674739 -0700
+@@ -10,7 +10,6 @@ from tornado.stack_context import NullCo
+ from tornado.testing import AsyncHTTPTestCase, AsyncHTTPSTestCase, AsyncTestCase, bind_unused_port, ExpectLog, gen_test
+ from tornado.test.util import unittest, skipIfNonUnix, refusing_port
+ from tornado.web import RequestHandler, Application
+-import certifi
+ import errno
+ import logging
+ import os
+@@ -877,7 +876,7 @@ class TestIOStreamStartTLS(AsyncTestCase
+     def test_handshake_fail(self):
+         server_future = self.server_start_tls(_server_ssl_options())
+         client_future = self.client_start_tls(
+-            dict(cert_reqs=ssl.CERT_REQUIRED, ca_certs=certifi.where()))
++            dict(cert_reqs=ssl.CERT_REQUIRED, ca_certs='/etc/pki/tls/cert.pem'))
+         with ExpectLog(gen_log, "SSL Error"):
+             with self.assertRaises(ssl.SSLError):
+                 yield client_future
