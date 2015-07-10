@@ -6,7 +6,7 @@
 
 Name:           python-%{pkgname}
 Version:        4.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Scalable, non-blocking web server and tools
 
 Group:          Development/Libraries
@@ -17,8 +17,10 @@ Source0:        https://pypi.python.org/packages/source/t/tornado/tornado-%{vers
 Patch0:         python-tornado-cert.patch
 
 BuildRequires:  python2-devel
+%if 0%{?fedora} < 22
 BuildRequires:  python-backports-ssl_match_hostname
 Requires:       python-backports-ssl_match_hostname
+%endif
 Requires:       python-pycurl
 %if 0%{?with_python3}
 BuildRequires:  python3-setuptools
@@ -144,6 +146,9 @@ popd
 
 
 %changelog
+* Fri Jul 10 2015 Orion Poplawski <orion@cora.nwra.com> - 4.1-3
+- Do not require python-backports-ssl_match_hostname for F22+ (bug #1231368)
+
 * Thu Jun 18 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 4.1-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_23_Mass_Rebuild
 
