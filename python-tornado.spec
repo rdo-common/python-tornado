@@ -5,8 +5,8 @@
 %global pkgname tornado
 
 Name:           python-%{pkgname}
-Version:        4.1
-Release:        3%{?dist}
+Version:        4.2.1
+Release:        1%{?dist}
 Summary:        Scalable, non-blocking web server and tools
 
 Group:          Development/Libraries
@@ -71,81 +71,58 @@ server and and tools. This package contains some example applications.
 %endif # with_python3
 
 %prep 
-%setup -qc 
-mv %{pkgname}-%{version} python2
-pushd python2
+%setup -q -n %{pkgname}-%{version}
 %patch0 -p1 -b .cert
 # remove shebang from files
 %{__sed} -i.orig -e '/^#!\//, 1d' *py tornado/*.py tornado/*/*.py
-popd
-
-%if 0%{?with_python3}
-cp -a python2 python3
-find python3 -name '*.py' | xargs sed -i '1s|^#!.*python|#!%{__python3}|'
-%endif # with_python3
 
 %build
 %if 0%{?with_python3}
-pushd python3
-    %{__python3} setup.py build
-popd
+%py3_build
 %endif # with_python3
-
-pushd python2
-    %{__python2} setup.py build
-popd
+%py2_build
 
 
 %install
 %if 0%{?with_python3}
-pushd python3
-    PATH=$PATH:%{buildroot}%{python3_sitearch}/%{pkgname}
-    %{__python3} setup.py install --root=%{buildroot}
-popd
+%py3_install
 %endif # with_python3
-
-pushd python2
-    PATH=$PATH:%{buildroot}%{python2_sitearch}/%{pkgname}
-    %{__python2} setup.py install --root=%{buildroot}
-popd
+%py2_install
 
 
 %check
-%if "%{dist}" != ".el6"
-    %if 0%{?with_python3}
-    pushd python3
-        PYTHONPATH=%{python3_sitearch} \
-        %{__python3} -m tornado.test.runtests --verbose
-    popd
-    %endif # with_python3
-    pushd python2
-        PYTHONPATH=%{python2_sitearch} \
-        %{__python2} -m tornado.test.runtests --verbose
-    popd
-%endif
+%if 0%{?with_python3}
+PYTHONPATH=%{python3_sitearch} %{__python3} -m tornado.test.runtests --verbose
+%endif # with_python3
+PYTHONPATH=%{python2_sitearch} %{__python2} -m tornado.test.runtests --verbose
+
 
 %files
-%doc python2/README.rst python2/PKG-INFO
+%doc README.rst
 
 %{python2_sitearch}/%{pkgname}/
 %{python2_sitearch}/%{pkgname}-%{version}-*.egg-info
 
 %files doc
-%doc python2/demos
+%doc demos
 
 %if 0%{?with_python3}
 %files -n python3-tornado
-%doc python3/README.rst python3/PKG-INFO
+%doc README.rst
 
 %{python3_sitearch}/%{pkgname}/
 %{python3_sitearch}/%{pkgname}-%{version}-*.egg-info
 
 %files -n python3-tornado-doc
-%doc python3/demos
+%doc demos
 %endif
 
 
 %changelog
+* Fri Sep 19 2015 Orion Poplawski <orion@cora.nwra.com> - 4.2.1-1
+- Update to 4.2.1
+- Modernize spec
+
 * Fri Jul 10 2015 Orion Poplawski <orion@cora.nwra.com> - 4.1-3
 - Do not require python-backports-ssl_match_hostname for F22+ (bug #1231368)
 
