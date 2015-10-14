@@ -6,7 +6,7 @@
 
 Name:           python-%{pkgname}
 Version:        4.2.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Scalable, non-blocking web server and tools
 
 Group:          Development/Libraries
@@ -15,6 +15,12 @@ URL:            http://www.tornadoweb.org
 Source0:        https://pypi.python.org/packages/source/t/tornado/tornado-%{version}.tar.gz
 # Patch to use system CA certs instead of certifi
 Patch0:         python-tornado-cert.patch
+# getargspec is deprecated in python3.5 and throws warnings
+# this patch uses getfullargspec instead on python3
+# Already in upstream
+Patch1:         use-getfullargspec.patch
+# Python 3.5 sends 'baz="";'; older versions use 'baz=;'
+Patch2:         fix-test-python35.patch
 
 BuildRequires:  python2-devel
 %if 0%{?fedora} < 22
@@ -73,6 +79,8 @@ server and and tools. This package contains some example applications.
 %prep 
 %setup -q -n %{pkgname}-%{version}
 %patch0 -p1 -b .cert
+%patch1 -p1
+%patch2 -p1
 # remove shebang from files
 %{__sed} -i.orig -e '/^#!\//, 1d' *py tornado/*.py tornado/*/*.py
 
@@ -119,6 +127,11 @@ PYTHONPATH=%{python2_sitearch} %{__python2} -m tornado.test.runtests --verbose
 
 
 %changelog
+* Wed Oct 14 2015 Robert Kuska <rkuska@redhat.com> - 4.2.1-2
+- Rebuilt for Python3.5 rebuild
+- Add patch to use getfullargspec on python3
+- Add patch to fix failing tests with python3.5
+
 * Fri Sep 19 2015 Orion Poplawski <orion@cora.nwra.com> - 4.2.1-1
 - Update to 4.2.1
 - Modernize spec
