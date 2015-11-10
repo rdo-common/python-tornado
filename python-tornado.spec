@@ -132,7 +132,7 @@ PYTHONPATH=%{python2_sitearch} %{__python2} -m tornado.test.runtests --verbose
 - Add patch to use getfullargspec on python3
 - Add patch to fix failing tests with python3.5
 
-* Fri Sep 19 2015 Orion Poplawski <orion@cora.nwra.com> - 4.2.1-1
+* Fri Sep 18 2015 Orion Poplawski <orion@cora.nwra.com> - 4.2.1-1
 - Update to 4.2.1
 - Modernize spec
 
