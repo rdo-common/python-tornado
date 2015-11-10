@@ -2,11 +2,11 @@
 %global with_python3 1
 %endif
 
-%global pkgname tornado
+%global srcname tornado
 
-Name:           python-%{pkgname}
+Name:           python-%{srcname}
 Version:        4.2.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Scalable, non-blocking web server and tools
 
 Group:          Development/Libraries
@@ -25,9 +25,7 @@ Patch2:         fix-test-python35.patch
 BuildRequires:  python2-devel
 %if 0%{?fedora} < 22
 BuildRequires:  python-backports-ssl_match_hostname
-Requires:       python-backports-ssl_match_hostname
 %endif
-Requires:       python-pycurl
 %if 0%{?with_python3}
 BuildRequires:  python3-setuptools
 BuildRequires:  python3-devel
@@ -43,19 +41,16 @@ reasonably fast. Because it is non-blocking and uses epoll, it can
 handle thousands of simultaneous standing connections, which means it is
 ideal for real-time web services.
 
-%package doc
-Summary:        Examples for python-tornado
-Group:          Documentation
-Requires:       python-tornado = %{version}-%{release}
-
-%description doc
-Tornado is an open source version of the scalable, non-blocking web
-server and and tools. This package contains some example applications.
-
-%if 0%{?with_python3}
-%package -n python3-tornado
+%package -n python2-%{srcname}
 Summary:        Scalable, non-blocking web server and tools
-%description -n python3-tornado
+%{?python_provide:%python_provide python2-%{srcname}}
+
+%if 0%{?fedora} < 22
+Requires:       python-backports-ssl_match_hostname
+%endif
+Requires:       python-pycurl
+
+%description -n python2-%{srcname}
 Tornado is an open source version of the scalable, non-blocking web
 server and tools.
 
@@ -65,19 +60,34 @@ reasonably fast. Because it is non-blocking and uses epoll, it can
 handle thousands of simultaneous standing connections, which means it is
 ideal for real-time web services.
 
-%package -n python3-tornado-doc
+%package doc
 Summary:        Examples for python-tornado
 Group:          Documentation
-Requires:       python3-tornado = %{version}-%{release}
+Obsoletes:      python3-%{srcname}-doc < 4.2.1-3
+Provides:       python3-%{srcname}-doc = %{version}-%{release}
 
-%description -n python3-tornado-doc
+%description doc
 Tornado is an open source version of the scalable, non-blocking web
 server and and tools. This package contains some example applications.
 
+%if 0%{?with_python3}
+%package -n python3-%{srcname}
+Summary:        Scalable, non-blocking web server and tools
+%{?python_provide:%python_provide python3-%{srcname}}
+
+%description -n python3-%{srcname}
+Tornado is an open source version of the scalable, non-blocking web
+server and tools.
+
+The framework is distinct from most mainstream web server frameworks
+(and certainly most Python frameworks) because it is non-blocking and
+reasonably fast. Because it is non-blocking and uses epoll, it can
+handle thousands of simultaneous standing connections, which means it is
+ideal for real-time web services.
 %endif # with_python3
 
 %prep 
-%setup -q -n %{pkgname}-%{version}
+%setup -q -n %{srcname}-%{version}
 %patch0 -p1 -b .cert
 %patch1 -p1
 %patch2 -p1
@@ -100,33 +110,31 @@ server and and tools. This package contains some example applications.
 
 %check
 %if 0%{?with_python3}
-PYTHONPATH=%{python3_sitearch} %{__python3} -m tornado.test.runtests --verbose
+%{__python3} -m tornado.test.runtests --verbose
 %endif # with_python3
-PYTHONPATH=%{python2_sitearch} %{__python2} -m tornado.test.runtests --verbose
+%{__python2} -m tornado.test.runtests --verbose
 
 
 %files
 %doc README.rst
-
-%{python2_sitearch}/%{pkgname}/
-%{python2_sitearch}/%{pkgname}-%{version}-*.egg-info
+%{python2_sitearch}/%{srcname}/
+%{python2_sitearch}/%{srcname}-%{version}-*.egg-info
 
 %files doc
 %doc demos
 
 %if 0%{?with_python3}
-%files -n python3-tornado
+%files -n python3-%{srcname}
 %doc README.rst
-
-%{python3_sitearch}/%{pkgname}/
-%{python3_sitearch}/%{pkgname}-%{version}-*.egg-info
-
-%files -n python3-tornado-doc
-%doc demos
+%{python3_sitearch}/%{srcname}/
+%{python3_sitearch}/%{srcname}-%{version}-*.egg-info
 %endif
 
 
 %changelog
+* Tue Nov 10 2015 Orion Poplawski <orion@cora.nwra.com> - 4.2.1-3
+- Build python2 packages, drop separate python3 doc package
+
 * Wed Oct 14 2015 Robert Kuska <rkuska@redhat.com> - 4.2.1-2
 - Rebuilt for Python3.5 rebuild
 - Add patch to use getfullargspec on python3
