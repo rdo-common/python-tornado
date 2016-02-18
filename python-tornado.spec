@@ -5,8 +5,8 @@
 %global srcname tornado
 
 Name:           python-%{srcname}
-Version:        4.2.1
-Release:        4%{?dist}
+Version:        4.3
+Release:        1%{?dist}
 Summary:        Scalable, non-blocking web server and tools
 
 Group:          Development/Libraries
@@ -15,20 +15,19 @@ URL:            http://www.tornadoweb.org
 Source0:        https://pypi.python.org/packages/source/t/tornado/tornado-%{version}.tar.gz
 # Patch to use system CA certs instead of certifi
 Patch0:         python-tornado-cert.patch
-# getargspec is deprecated in python3.5 and throws warnings
-# this patch uses getfullargspec instead on python3
-# Already in upstream
-Patch1:         use-getfullargspec.patch
-# Python 3.5 sends 'baz="";'; older versions use 'baz=;'
-Patch2:         fix-test-python35.patch
 
 BuildRequires:  python2-devel
+BuildRequires:  python2-backports_abc
 %if 0%{?fedora} < 22
 BuildRequires:  python-backports-ssl_match_hostname
 %endif
 %if 0%{?with_python3}
 BuildRequires:  python3-setuptools
 BuildRequires:  python3-devel
+%if 0%{?fedora} < 24
+# Only needed for python < 3.5
+BuildRequires:  python3-backports_abc
+%endif
 %endif
 
 %description
@@ -49,6 +48,8 @@ Summary:        Scalable, non-blocking web server and tools
 Requires:       python-backports-ssl_match_hostname
 %endif
 Requires:       python-pycurl
+Requires:       python2-backports_abc
+Requires:       python2-singledispatch
 
 %description -n python2-%{srcname}
 Tornado is an open source version of the scalable, non-blocking web
@@ -74,6 +75,11 @@ server and and tools. This package contains some example applications.
 %package -n python3-%{srcname}
 Summary:        Scalable, non-blocking web server and tools
 %{?python_provide:%python_provide python3-%{srcname}}
+Requires:       python3-pycurl
+%if 0%{?fedora} < 24
+# Only needed for python < 3.5
+Requires:       python3-backports_abc
+%endif
 
 %description -n python3-%{srcname}
 Tornado is an open source version of the scalable, non-blocking web
@@ -89,8 +95,6 @@ ideal for real-time web services.
 %prep 
 %setup -q -n %{srcname}-%{version}
 %patch0 -p1 -b .cert
-%patch1 -p1
-%patch2 -p1
 # remove shebang from files
 %{__sed} -i.orig -e '/^#!\//, 1d' *py tornado/*.py tornado/*/*.py
 
@@ -132,6 +136,10 @@ ideal for real-time web services.
 
 
 %changelog
+* Thu Feb 18 2016 Orion Poplawski <orion@cora.nwra.com> - 4.3-1
+- Update to 4.3
+- Drop upstream patches
+
 * Thu Feb 04 2016 Fedora Release Engineering <releng@fedoraproject.org> - 4.2.1-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
 
