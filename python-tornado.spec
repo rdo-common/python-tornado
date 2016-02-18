@@ -21,6 +21,7 @@ BuildRequires:  python2-backports_abc
 %if 0%{?fedora} < 22
 BuildRequires:  python-backports-ssl_match_hostname
 %endif
+BuildRequires:  python2-singledispatch
 %if 0%{?with_python3}
 BuildRequires:  python3-setuptools
 BuildRequires:  python3-devel
