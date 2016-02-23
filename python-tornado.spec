@@ -6,7 +6,7 @@
 
 Name:           python-%{srcname}
 Version:        4.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Scalable, non-blocking web server and tools
 
 Group:          Development/Libraries
@@ -120,7 +120,7 @@ ideal for real-time web services.
 %{__python2} -m tornado.test.runtests --verbose
 
 
-%files
+%files -n python2-%{srcname}
 %doc README.rst
 %{python2_sitearch}/%{srcname}/
 %{python2_sitearch}/%{srcname}-%{version}-*.egg-info
@@ -137,6 +137,9 @@ ideal for real-time web services.
 
 
 %changelog
+* Mon Feb 22 2016 Orion Poplawski <orion@cora.nwra.com> - 4.3-2
+- Properly build python2-tornado
+
 * Thu Feb 18 2016 Orion Poplawski <orion@cora.nwra.com> - 4.3-1
 - Update to 4.3
 - Drop upstream patches
