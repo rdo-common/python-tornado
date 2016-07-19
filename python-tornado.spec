@@ -6,7 +6,7 @@
 
 Name:           python-%{srcname}
 Version:        4.3
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Scalable, non-blocking web server and tools
 
 Group:          Development/Libraries
@@ -137,6 +137,9 @@ ideal for real-time web services.
 
 
 %changelog
+* Tue Jul 19 2016 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 4.3-3
+- https://fedoraproject.org/wiki/Changes/Automatic_Provides_for_Python_RPM_Packages
+
 * Mon Feb 22 2016 Orion Poplawski <orion@cora.nwra.com> - 4.3-2
 - Properly build python2-tornado
 
