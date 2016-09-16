@@ -1,7 +1,26 @@
-diff -up tornado-4.2.1/tornado/simple_httpclient.py.cert tornado-4.2.1/tornado/simple_httpclient.py
---- tornado-4.2.1/tornado/simple_httpclient.py.cert	2015-07-17 09:31:29.000000000 -0600
-+++ tornado-4.2.1/tornado/simple_httpclient.py	2015-09-18 16:10:15.293077440 -0600
-@@ -33,17 +33,8 @@ except ImportError:
+diff -up tornado-4.3/setup.py.cert tornado-4.3/setup.py
+--- tornado-4.3/setup.py.cert	2016-09-15 21:13:15.010093113 -0600
++++ tornado-4.3/setup.py	2016-09-15 21:23:11.709772545 -0600
+@@ -128,10 +128,6 @@ if setuptools is not None:
+         install_requires.append('backports.ssl_match_hostname')
+     if sys.version_info < (3, 4):
+         install_requires.append('singledispatch')
+-        # Certifi is also optional on 2.7.9+, although making our dependencies
+-        # conditional on micro version numbers seems like a bad idea
+-        # until we have more declarative metadata.
+-        install_requires.append('certifi')
+     if sys.version_info < (3, 5):
+         install_requires.append('backports_abc>=0.4')
+     kwargs['install_requires'] = install_requires
+diff -up tornado-4.3/tornado/simple_httpclient.py.cert tornado-4.3/tornado/simple_httpclient.py
+--- tornado-4.3/tornado/simple_httpclient.py.cert	2015-10-24 16:50:23.000000000 -0600
++++ tornado-4.3/tornado/simple_httpclient.py	2016-09-15 21:13:15.207107536 -0600
+@@ -1,4 +1,3 @@
+-#!/usr/bin/env python
+ from __future__ import absolute_import, division, print_function, with_statement
+ 
+ from tornado.escape import utf8, _unicode
+@@ -33,17 +32,8 @@ except ImportError:
      # ssl is not available on Google App Engine.
      ssl = None
  
