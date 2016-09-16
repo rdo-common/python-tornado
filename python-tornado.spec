@@ -15,6 +15,9 @@ URL:            http://www.tornadoweb.org
 Source0:        https://pypi.python.org/packages/source/t/tornado/tornado-%{version}.tar.gz
 # Patch to use system CA certs instead of certifi
 Patch0:         python-tornado-cert.patch
+# Patch to run tests from project dir
+# https://github.com/tornadoweb/tornado/pull/1781
+Patch1:         python-tornado-test.patch
 
 BuildRequires:  python2-devel
 BuildRequires:  python2-backports_abc
@@ -96,6 +99,7 @@ ideal for real-time web services.
 %prep 
 %setup -q -n %{srcname}-%{version}
 %patch0 -p1 -b .cert
+%patch1 -p1 -b .test
 # remove shebang from files
 %{__sed} -i.orig -e '/^#!\//, 1d' *py tornado/*.py tornado/*/*.py
 
