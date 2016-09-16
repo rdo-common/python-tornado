@@ -6,7 +6,7 @@
 
 Name:           python-%{srcname}
 Version:        4.3
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Scalable, non-blocking web server and tools
 
 Group:          Development/Libraries
@@ -15,6 +15,9 @@ URL:            http://www.tornadoweb.org
 Source0:        https://pypi.python.org/packages/source/t/tornado/tornado-%{version}.tar.gz
 # Patch to use system CA certs instead of certifi
 Patch0:         python-tornado-cert.patch
+# Remove unnecessary requires (backports.ssl_match_hostname
+# https://bugzilla.redhat.com/show_bug.cgi?id=1372887
+Patch1:         python-tornado-requires.patch
 
 BuildRequires:  python2-devel
 BuildRequires:  python2-backports_abc
@@ -96,6 +99,7 @@ ideal for real-time web services.
 %prep 
 %setup -q -n %{srcname}-%{version}
 %patch0 -p1 -b .cert
+%patch1 -p1 -b .requires
 # remove shebang from files
 %{__sed} -i.orig -e '/^#!\//, 1d' *py tornado/*.py tornado/*/*.py
 
@@ -137,6 +141,9 @@ ideal for real-time web services.
 
 
 %changelog
+* Thu Sep 15 2016 Orion Poplawski <orion@cora.nwra.com> - 4.3-5
+- Remove backports.ssl_match_hostname from python2-tornado egg requires (bug #1372887)
+
 * Thu Sep 15 2016 Orion Poplawski <orion@cora.nwra.com> - 4.3-4
 - Remove certifi from python2-tornado egg requires (bug #1372886)
 
