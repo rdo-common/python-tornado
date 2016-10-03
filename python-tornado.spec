@@ -5,14 +5,14 @@
 %global srcname tornado
 
 Name:           python-%{srcname}
-Version:        4.4.1
+Version:        4.4.2
 Release:        1%{?dist}
 Summary:        Scalable, non-blocking web server and tools
 
 Group:          Development/Libraries
 License:        ASL 2.0
 URL:            http://www.tornadoweb.org
-Source0:        https://pypi.python.org/packages/source/t/tornado/tornado-%{version}.tar.gz
+Source0:        https://files.pythonhosted.org/packages/source/t/tornado/tornado-%{version}.tar.gz
 # Patch to use system CA certs instead of certifi
 Patch0:         python-tornado-cert.patch
 # Patch to run tests from project dir
@@ -141,6 +141,9 @@ ideal for real-time web services.
 
 
 %changelog
+* Sun Oct 2 2016 Orion Poplawski <orion@cora.nwra.com> - 4.4.2-1
+- Update to 4.4.2
+
 * Thu Sep 15 2016 Orion Poplawski <orion@cora.nwra.com> - 4.4.1-1
 - Update to 4.4.1
 - Drop requires patch, fixed upstream
