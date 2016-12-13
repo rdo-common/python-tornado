@@ -6,7 +6,7 @@
 
 Name:           python-%{srcname}
 Version:        4.4.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Scalable, non-blocking web server and tools
 
 Group:          Development/Libraries
@@ -18,6 +18,9 @@ Patch0:         python-tornado-cert.patch
 # Patch to run tests from project dir
 # https://github.com/tornadoweb/tornado/pull/1781
 Patch1:         python-tornado-test.patch
+# Patch to fix tests for Python 3.6
+# https://github.com/tornadoweb/tornado/commit/a391e126e7f277244c691f5057d4cdb97c1ba2e7
+Patch2:			update-warning-config-to-fix-tests-on-python-3.6-nightly.patch
 
 BuildRequires:  python2-devel
 BuildRequires:  python2-backports_abc
@@ -100,6 +103,7 @@ ideal for real-time web services.
 %setup -q -n %{srcname}-%{version}
 %patch0 -p1 -b .cert
 %patch1 -p1 -b .test
+%patch2 -p1
 # remove shebang from files
 %{__sed} -i.orig -e '/^#!\//, 1d' *py tornado/*.py tornado/*/*.py
 
@@ -141,6 +145,10 @@ ideal for real-time web services.
 
 
 %changelog
+* Tue Dec 13 2016 Stratakis Charalampos <cstratak@redhat.com> - 4.4.2-2
+- Rebuild for Python 3.6
+- Added patch to fix Python 3.6 test failures
+
 * Sun Oct 2 2016 Orion Poplawski <orion@cora.nwra.com> - 4.4.2-1
 - Update to 4.4.2
 
