@@ -24,7 +24,7 @@ Patch2:			update-warning-config-to-fix-tests-on-python-3.6-nightly.patch
 
 BuildRequires:  python2-devel
 BuildRequires:  python2-backports_abc
-%if 0%{?fedora} < 22
+%if 0%{?fedora} < 22 || 0%{?rhel} > 6
 BuildRequires:  python-backports-ssl_match_hostname
 %endif
 BuildRequires:  python2-singledispatch
@@ -51,7 +51,7 @@ ideal for real-time web services.
 Summary:        Scalable, non-blocking web server and tools
 %{?python_provide:%python_provide python2-%{srcname}}
 
-%if 0%{?fedora} < 22
+%if 0%{?fedora} < 22 || 0%{?rhel} > 6
 Requires:       python-backports-ssl_match_hostname
 %endif
 Requires:       python-pycurl
