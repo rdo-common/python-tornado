@@ -6,7 +6,7 @@
 
 Name:           python-%{srcname}
 Version:        4.4.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Scalable, non-blocking web server and tools
 
 Group:          Development/Libraries
@@ -145,6 +145,9 @@ ideal for real-time web services.
 
 
 %changelog
+* Sat Feb 11 2017 Fedora Release Engineering <releng@fedoraproject.org> - 4.4.2-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
+
 * Tue Dec 13 2016 Stratakis Charalampos <cstratak@redhat.com> - 4.4.2-2
 - Rebuild for Python 3.6
 - Added patch to fix Python 3.6 test failures
