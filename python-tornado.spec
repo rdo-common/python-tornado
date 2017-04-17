@@ -5,8 +5,8 @@
 %global srcname tornado
 
 Name:           python-%{srcname}
-Version:        4.4.2
-Release:        3%{?dist}
+Version:        4.5
+Release:        1%{?dist}
 Summary:        Scalable, non-blocking web server and tools
 
 Group:          Development/Libraries
@@ -15,12 +15,6 @@ URL:            http://www.tornadoweb.org
 Source0:        https://files.pythonhosted.org/packages/source/t/tornado/tornado-%{version}.tar.gz
 # Patch to use system CA certs instead of certifi
 Patch0:         python-tornado-cert.patch
-# Patch to run tests from project dir
-# https://github.com/tornadoweb/tornado/pull/1781
-Patch1:         python-tornado-test.patch
-# Patch to fix tests for Python 3.6
-# https://github.com/tornadoweb/tornado/commit/a391e126e7f277244c691f5057d4cdb97c1ba2e7
-Patch2:			update-warning-config-to-fix-tests-on-python-3.6-nightly.patch
 
 BuildRequires:  python2-devel
 BuildRequires:  python2-backports_abc
@@ -29,11 +23,11 @@ BuildRequires:  python-backports-ssl_match_hostname
 %endif
 BuildRequires:  python2-singledispatch
 %if 0%{?with_python3}
-BuildRequires:  python3-setuptools
-BuildRequires:  python3-devel
+BuildRequires:  python%{python3_pkgversion}-setuptools
+BuildRequires:  python%{python3_pkgversion}-devel
 %if 0%{?fedora} < 24
 # Only needed for python < 3.5
-BuildRequires:  python3-backports_abc
+BuildRequires:  python%{python3_pkgversion}-backports_abc
 %endif
 %endif
 
@@ -71,24 +65,24 @@ ideal for real-time web services.
 %package doc
 Summary:        Examples for python-tornado
 Group:          Documentation
-Obsoletes:      python3-%{srcname}-doc < 4.2.1-3
-Provides:       python3-%{srcname}-doc = %{version}-%{release}
+Obsoletes:      python%{python3_pkgversion}-%{srcname}-doc < 4.2.1-3
+Provides:       python%{python3_pkgversion}-%{srcname}-doc = %{version}-%{release}
 
 %description doc
 Tornado is an open source version of the scalable, non-blocking web
 server and and tools. This package contains some example applications.
 
 %if 0%{?with_python3}
-%package -n python3-%{srcname}
+%package -n python%{python3_pkgversion}-%{srcname}
 Summary:        Scalable, non-blocking web server and tools
-%{?python_provide:%python_provide python3-%{srcname}}
-Requires:       python3-pycurl
+%{?python_provide:%python_provide python%{python3_pkgversion}-%{srcname}}
+Requires:       python%{python3_pkgversion}-pycurl
 %if 0%{?fedora} < 24
 # Only needed for python < 3.5
-Requires:       python3-backports_abc
+Requires:       python%{python3_pkgversion}-backports_abc
 %endif
 
-%description -n python3-%{srcname}
+%description -n python%{python3_pkgversion}-%{srcname}
 Tornado is an open source version of the scalable, non-blocking web
 server and tools.
 
@@ -102,8 +96,6 @@ ideal for real-time web services.
 %prep 
 %setup -q -n %{srcname}-%{version}
 %patch0 -p1 -b .cert
-%patch1 -p1 -b .test
-%patch2 -p1
 # remove shebang from files
 %{__sed} -i.orig -e '/^#!\//, 1d' *py tornado/*.py tornado/*/*.py
 
@@ -137,7 +129,7 @@ ideal for real-time web services.
 %doc demos
 
 %if 0%{?with_python3}
-%files -n python3-%{srcname}
+%files -n python%{python3_pkgversion}-%{srcname}
 %doc README.rst
 %{python3_sitearch}/%{srcname}/
 %{python3_sitearch}/%{srcname}-%{version}-*.egg-info
@@ -145,6 +137,9 @@ ideal for real-time web services.
 
 
 %changelog
+* Mon Apr 17 2017 Orion Poplawski <orion@cora.nwra.com> - 4.5-1
+- Update to 4.5
+
 * Sat Feb 11 2017 Fedora Release Engineering <releng@fedoraproject.org> - 4.4.2-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
 
