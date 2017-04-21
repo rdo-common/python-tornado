@@ -5,8 +5,8 @@
 %global srcname tornado
 
 Name:           python-%{srcname}
-Version:        4.5
-Release:        1%{?dist}
+Version:        4.5.1
+Release:        1%{?d.1ist}
 Summary:        Scalable, non-blocking web server and tools
 
 Group:          Development/Libraries
@@ -137,6 +137,9 @@ ideal for real-time web services.
 
 
 %changelog
+* Thu Apr 20 2017 Orion Poplawski <orion@cora.nwra.com> - 4.5.1-1
+- Update to 4.5.1
+
 * Mon Apr 17 2017 Orion Poplawski <orion@cora.nwra.com> - 4.5-1
 - Update to 4.5
 
