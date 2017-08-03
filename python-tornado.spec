@@ -6,7 +6,7 @@
 
 Name:           python-%{srcname}
 Version:        4.5.1
-Release:        2%{?d.1ist}
+Release:        3%{?d.1ist}
 Summary:        Scalable, non-blocking web server and tools
 
 Group:          Development/Libraries
@@ -137,6 +137,9 @@ ideal for real-time web services.
 
 
 %changelog
+* Thu Aug 03 2017 Fedora Release Engineering <releng@fedoraproject.org> - 4.5.1-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Binutils_Mass_Rebuild
+
 * Thu Jul 27 2017 Fedora Release Engineering <releng@fedoraproject.org> - 4.5.1-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Mass_Rebuild
 
