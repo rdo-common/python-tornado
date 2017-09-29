@@ -1,4 +1,4 @@
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?rhel} > 7
 %global with_python3 1
 %endif
 
@@ -6,7 +6,7 @@
 
 Name:           python-%{srcname}
 Version:        4.5.1
-Release:        3%{?d.1ist}
+Release:        4%{?d.1ist}
 Summary:        Scalable, non-blocking web server and tools
 
 Group:          Development/Libraries
@@ -18,17 +18,10 @@ Patch0:         python-tornado-cert.patch
 
 BuildRequires:  python2-devel
 BuildRequires:  python2-backports_abc
-%if 0%{?fedora} < 22
-BuildRequires:  python-backports-ssl_match_hostname
-%endif
 BuildRequires:  python2-singledispatch
 %if 0%{?with_python3}
 BuildRequires:  python%{python3_pkgversion}-setuptools
 BuildRequires:  python%{python3_pkgversion}-devel
-%if 0%{?fedora} < 24
-# Only needed for python < 3.5
-BuildRequires:  python%{python3_pkgversion}-backports_abc
-%endif
 %endif
 
 %description
@@ -45,9 +38,6 @@ ideal for real-time web services.
 Summary:        Scalable, non-blocking web server and tools
 %{?python_provide:%python_provide python2-%{srcname}}
 
-%if 0%{?fedora} < 22
-Requires:       python-backports-ssl_match_hostname
-%endif
 Requires:       python-pycurl
 Requires:       python2-backports_abc
 Requires:       python2-singledispatch
@@ -77,10 +67,6 @@ server and and tools. This package contains some example applications.
 Summary:        Scalable, non-blocking web server and tools
 %{?python_provide:%python_provide python%{python3_pkgversion}-%{srcname}}
 Requires:       python%{python3_pkgversion}-pycurl
-%if 0%{?fedora} < 24
-# Only needed for python < 3.5
-Requires:       python%{python3_pkgversion}-backports_abc
-%endif
 
 %description -n python%{python3_pkgversion}-%{srcname}
 Tornado is an open source version of the scalable, non-blocking web
@@ -137,6 +123,9 @@ ideal for real-time web services.
 
 
 %changelog
+* Fri Sep 29 2017 Troy Dawson <tdawson@redhat.com> - 4.5.1-4
+- Cleanup spec file conditionals
+
 * Thu Aug 03 2017 Fedora Release Engineering <releng@fedoraproject.org> - 4.5.1-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Binutils_Mass_Rebuild
 
