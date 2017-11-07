@@ -5,8 +5,8 @@
 %global srcname tornado
 
 Name:           python-%{srcname}
-Version:        4.5.1
-Release:        4%{?d.1ist}
+Version:        4.5.2
+Release:        1%{?d.1ist}
 Summary:        Scalable, non-blocking web server and tools
 
 Group:          Development/Libraries
@@ -123,6 +123,9 @@ ideal for real-time web services.
 
 
 %changelog
+* Tue Nov 07 2017 Charalampos Stratakis <cstratak@redhat.com> - 4.5.2-1
+- Update to 4.5.2
+
 * Fri Sep 29 2017 Troy Dawson <tdawson@redhat.com> - 4.5.1-4
 - Cleanup spec file conditionals
 
