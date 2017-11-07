@@ -6,7 +6,7 @@
 
 Name:           python-%{srcname}
 Version:        4.5.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Scalable, non-blocking web server and tools
 
 Group:          Development/Libraries
