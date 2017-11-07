@@ -6,7 +6,7 @@
 
 Name:           python-%{srcname}
 Version:        4.5.2
-Release:        1%{?d.1ist}
+Release:        1%{?dist}
 Summary:        Scalable, non-blocking web server and tools
 
 Group:          Development/Libraries
@@ -123,6 +123,9 @@ ideal for real-time web services.
 
 
 %changelog
+* Tue Nov 07 2017 Charalampos Stratakis <cstratak@redhat.com> - 4.5.2-2
+- Fix dist tag and bump release for rebuild
+
 * Tue Nov 07 2017 Charalampos Stratakis <cstratak@redhat.com> - 4.5.2-1
 - Update to 4.5.2
 
