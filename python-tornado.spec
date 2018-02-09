@@ -6,7 +6,7 @@
 
 Name:           python-%{srcname}
 Version:        4.5.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Scalable, non-blocking web server and tools
 
 Group:          Development/Libraries
@@ -123,6 +123,9 @@ ideal for real-time web services.
 
 
 %changelog
+* Fri Feb 09 2018 Fedora Release Engineering <releng@fedoraproject.org> - 4.5.2-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
+
 * Tue Nov 07 2017 Charalampos Stratakis <cstratak@redhat.com> - 4.5.2-2
 - Fix dist tag and bump release for rebuild
 
