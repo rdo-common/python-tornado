@@ -6,7 +6,7 @@
 
 Name:           python-%{srcname}
 Version:        4.5.2
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Scalable, non-blocking web server and tools
 
 Group:          Development/Libraries
@@ -38,7 +38,7 @@ ideal for real-time web services.
 Summary:        Scalable, non-blocking web server and tools
 %{?python_provide:%python_provide python2-%{srcname}}
 
-Requires:       python-pycurl
+Requires:       python2-pycurl
 Requires:       python2-backports_abc
 Requires:       python2-singledispatch
 
@@ -123,6 +123,10 @@ ideal for real-time web services.
 
 
 %changelog
+* Mon Feb 12 2018 Iryna Shcherbina <ishcherb@redhat.com> - 4.5.2-4
+- Update Python 2 dependency declarations to new packaging standards
+  (See https://fedoraproject.org/wiki/FinalizingFedoraSwitchtoPython3)
+
 * Fri Feb 09 2018 Fedora Release Engineering <releng@fedoraproject.org> - 4.5.2-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
 
