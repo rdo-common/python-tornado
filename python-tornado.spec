@@ -16,6 +16,7 @@ Source0:        https://files.pythonhosted.org/packages/source/t/tornado/tornado
 # Patch to use system CA certs instead of certifi
 Patch0:         python-tornado-cert.patch
 
+BuildRequires:  gcc
 BuildRequires:  python2-devel
 BuildRequires:  python2-backports_abc
 BuildRequires:  python2-singledispatch
