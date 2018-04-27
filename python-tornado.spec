@@ -1,12 +1,15 @@
-%if 0%{?fedora} || 0%{?rhel} > 7
-%global with_python3 1
+# python2 is not available on RHEL > 7
+%if 0%{?rhel} > 7
+%bcond_with python2
+%else
+%bcond_without python2
 %endif
 
 %global srcname tornado
 
 Name:           python-%{srcname}
 Version:        4.5.2
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Scalable, non-blocking web server and tools
 
 Group:          Development/Libraries
@@ -17,13 +20,14 @@ Source0:        https://files.pythonhosted.org/packages/source/t/tornado/tornado
 Patch0:         python-tornado-cert.patch
 
 BuildRequires:  gcc
+
+%if %{with python2}
 BuildRequires:  python2-devel
 BuildRequires:  python2-backports_abc
 BuildRequires:  python2-singledispatch
-%if 0%{?with_python3}
+%endif # with python2
 BuildRequires:  python%{python3_pkgversion}-setuptools
 BuildRequires:  python%{python3_pkgversion}-devel
-%endif
 
 %description
 Tornado is an open source version of the scalable, non-blocking web
@@ -35,6 +39,7 @@ reasonably fast. Because it is non-blocking and uses epoll, it can
 handle thousands of simultaneous standing connections, which means it is
 ideal for real-time web services.
 
+%if %{with python2}
 %package -n python2-%{srcname}
 Summary:        Scalable, non-blocking web server and tools
 %{?python_provide:%python_provide python2-%{srcname}}
@@ -52,6 +57,7 @@ The framework is distinct from most mainstream web server frameworks
 reasonably fast. Because it is non-blocking and uses epoll, it can
 handle thousands of simultaneous standing connections, which means it is
 ideal for real-time web services.
+%endif  # with python2
 
 %package doc
 Summary:        Examples for python-tornado
@@ -63,7 +69,6 @@ Provides:       python%{python3_pkgversion}-%{srcname}-doc = %{version}-%{releas
 Tornado is an open source version of the scalable, non-blocking web
 server and and tools. This package contains some example applications.
 
-%if 0%{?with_python3}
 %package -n python%{python3_pkgversion}-%{srcname}
 Summary:        Scalable, non-blocking web server and tools
 %{?python_provide:%python_provide python%{python3_pkgversion}-%{srcname}}
@@ -78,7 +83,6 @@ The framework is distinct from most mainstream web server frameworks
 reasonably fast. Because it is non-blocking and uses epoll, it can
 handle thousands of simultaneous standing connections, which means it is
 ideal for real-time web services.
-%endif # with_python3
 
 %prep 
 %setup -q -n %{srcname}-%{version}
@@ -87,43 +91,39 @@ ideal for real-time web services.
 %{__sed} -i.orig -e '/^#!\//, 1d' *py tornado/*.py tornado/*/*.py
 
 %build
-%if 0%{?with_python3}
 %py3_build
-%endif # with_python3
-%py2_build
+%{?with_python2:%py2_build}
 
 
 %install
-%if 0%{?with_python3}
 %py3_install
-%endif # with_python3
-%py2_install
-
+%{?with_python2:%py2_install}
 
 %check
-%if 0%{?with_python3}
 %{__python3} -m tornado.test.runtests --verbose
-%endif # with_python3
-%{__python2} -m tornado.test.runtests --verbose
+%{?with_python2:%{__python2} -m tornado.test.runtests --verbose}
 
-
+%if %{with python2}
 %files -n python2-%{srcname}
 %doc README.rst
 %{python2_sitearch}/%{srcname}/
 %{python2_sitearch}/%{srcname}-%{version}-*.egg-info
+%endif # with python2
 
 %files doc
 %doc demos
 
-%if 0%{?with_python3}
 %files -n python%{python3_pkgversion}-%{srcname}
 %doc README.rst
 %{python3_sitearch}/%{srcname}/
 %{python3_sitearch}/%{srcname}-%{version}-*.egg-info
-%endif
 
 
 %changelog
+* Thu Apr 26 2018 Lumír Balhar <lbalhar@redhat.com> - 4.5.2-5
+- New conditionals for Python 2
+- Drop Python 3 conditional
+
 * Mon Feb 12 2018 Iryna Shcherbina <ishcherb@redhat.com> - 4.5.2-4
 - Update Python 2 dependency declarations to new packaging standards
   (See https://fedoraproject.org/wiki/FinalizingFedoraSwitchtoPython3)
