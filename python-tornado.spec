@@ -8,16 +8,19 @@
 %global srcname tornado
 
 Name:           python-%{srcname}
-Version:        4.5.2
-Release:        5%{?dist}
+Version:        5.0.2
+Release:        1%{?dist}
 Summary:        Scalable, non-blocking web server and tools
 
 Group:          Development/Libraries
 License:        ASL 2.0
 URL:            http://www.tornadoweb.org
 Source0:        https://files.pythonhosted.org/packages/source/t/tornado/tornado-%{version}.tar.gz
-# Patch to use system CA certs instead of certifi
-Patch0:         python-tornado-cert.patch
+
+# If unittest2 instead of unittest is used while running the tests,
+# the deprecation warnings will make the test suite error out.
+# Fixed upstream: https://github.com/tornadoweb/tornado/pull/2350/commits/1a9b9939376b80d9f053734f539b860e0dca1aff
+Patch0:         fix-erroneous-deprecation-warnings.patch
 
 BuildRequires:  gcc
 
@@ -25,6 +28,7 @@ BuildRequires:  gcc
 BuildRequires:  python2-devel
 BuildRequires:  python2-backports_abc
 BuildRequires:  python2-singledispatch
+BuildRequires:  python2-futures
 %endif # with python2
 BuildRequires:  python%{python3_pkgversion}-setuptools
 BuildRequires:  python%{python3_pkgversion}-devel
@@ -86,7 +90,7 @@ ideal for real-time web services.
 
 %prep 
 %setup -q -n %{srcname}-%{version}
-%patch0 -p1 -b .cert
+%patch0 -p1
 # remove shebang from files
 %{__sed} -i.orig -e '/^#!\//, 1d' *py tornado/*.py tornado/*/*.py
 
@@ -105,6 +109,7 @@ ideal for real-time web services.
 
 %if %{with python2}
 %files -n python2-%{srcname}
+%license LICENSE
 %doc README.rst
 %{python2_sitearch}/%{srcname}/
 %{python2_sitearch}/%{srcname}-%{version}-*.egg-info
@@ -114,12 +119,16 @@ ideal for real-time web services.
 %doc demos
 
 %files -n python%{python3_pkgversion}-%{srcname}
+%license LICENSE
 %doc README.rst
 %{python3_sitearch}/%{srcname}/
 %{python3_sitearch}/%{srcname}-%{version}-*.egg-info
 
 
 %changelog
+* Fri May 18 2018 Charalampos Stratakis <cstratak@redhat.com> - 5.0.2-1
+- Update to 5.0.2
+
 * Thu Apr 26 2018 Lumír Balhar <lbalhar@redhat.com> - 4.5.2-5
 - New conditionals for Python 2
 - Drop Python 3 conditional
