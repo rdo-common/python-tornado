@@ -9,7 +9,7 @@
 
 Name:           python-%{srcname}
 Version:        5.0.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Scalable, non-blocking web server and tools
 
 Group:          Development/Libraries
@@ -51,6 +51,7 @@ Summary:        Scalable, non-blocking web server and tools
 Requires:       python2-pycurl
 Requires:       python2-backports_abc
 Requires:       python2-singledispatch
+Requires:       python2-futures
 
 %description -n python2-%{srcname}
 Tornado is an open source version of the scalable, non-blocking web
@@ -126,6 +127,9 @@ ideal for real-time web services.
 
 
 %changelog
+* Sat May 19 2018 Miro Hrončok <mhroncok@redhat.com> - 5.0.2-2
+- Require python2-futures
+
 * Fri May 18 2018 Charalampos Stratakis <cstratak@redhat.com> - 5.0.2-1
 - Update to 5.0.2
 
