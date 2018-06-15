@@ -9,7 +9,7 @@
 
 Name:           python-%{srcname}
 Version:        5.0.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Scalable, non-blocking web server and tools
 
 Group:          Development/Libraries
@@ -127,6 +127,9 @@ ideal for real-time web services.
 
 
 %changelog
+* Fri Jun 15 2018 Miro Hrončok <mhroncok@redhat.com> - 5.0.2-3
+- Rebuilt for Python 3.7
+
 * Sat May 19 2018 Miro Hrončok <mhroncok@redhat.com> - 5.0.2-2
 - Require python2-futures
 
