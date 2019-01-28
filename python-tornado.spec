@@ -12,7 +12,6 @@ Version:        5.0.2
 Release:        4%{?dist}
 Summary:        Scalable, non-blocking web server and tools
 
-Group:          Development/Libraries
 License:        ASL 2.0
 URL:            http://www.tornadoweb.org
 Source0:        https://files.pythonhosted.org/packages/source/t/tornado/tornado-%{version}.tar.gz
@@ -66,7 +65,6 @@ ideal for real-time web services.
 
 %package doc
 Summary:        Examples for python-tornado
-Group:          Documentation
 Obsoletes:      python%{python3_pkgversion}-%{srcname}-doc < 4.2.1-3
 Provides:       python%{python3_pkgversion}-%{srcname}-doc = %{version}-%{release}
 
