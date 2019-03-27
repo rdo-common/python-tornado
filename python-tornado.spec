@@ -8,18 +8,18 @@
 %global srcname tornado
 
 Name:           python-%{srcname}
-Version:        5.0.2
-Release:        5%{?dist}
+Version:        5.1.1
+Release:        1%{?dist}
 Summary:        Scalable, non-blocking web server and tools
 
 License:        ASL 2.0
 URL:            http://www.tornadoweb.org
-Source0:        https://files.pythonhosted.org/packages/source/t/tornado/tornado-%{version}.tar.gz
+Source0:        %{pypi_source}
 
-# If unittest2 instead of unittest is used while running the tests,
-# the deprecation warnings will make the test suite error out.
-# Fixed upstream: https://github.com/tornadoweb/tornado/pull/2350/commits/1a9b9939376b80d9f053734f539b860e0dca1aff
-Patch0:         fix-erroneous-deprecation-warnings.patch
+# Python 3.8 introduces SyntaxWarnings on invalid escape sequences
+# Tornado has them, mostly in docstrings and the tests treat them as errors
+# Fixed upstream: https://github.com/tornadoweb/tornado/commit/6dceb64ed27c1d48af22142f2ebae946f0e85e95
+Patch0:         fix-syntax-warnings.patch
 
 BuildRequires:  gcc
 
@@ -48,9 +48,6 @@ Summary:        Scalable, non-blocking web server and tools
 %{?python_provide:%python_provide python2-%{srcname}}
 
 Requires:       python2-pycurl
-Requires:       python2-backports_abc
-Requires:       python2-singledispatch
-Requires:       python2-futures
 
 %description -n python2-%{srcname}
 Tornado is an open source version of the scalable, non-blocking web
@@ -88,8 +85,7 @@ handle thousands of simultaneous standing connections, which means it is
 ideal for real-time web services.
 
 %prep 
-%setup -q -n %{srcname}-%{version}
-%patch0 -p1
+%autosetup -p1 -n %{srcname}-%{version}
 # remove shebang from files
 %{__sed} -i.orig -e '/^#!\//, 1d' *py tornado/*.py tornado/*/*.py
 
@@ -125,6 +121,10 @@ ideal for real-time web services.
 
 
 %changelog
+* Wed Mar 27 2019 Miro Hrončok <mhroncok@redhat.com> - 5.1.1-1
+- Update to 5.1.1
+- Fix SyntaxWarnings (turned into SyntaxErrors) on Python 3.8
+
 * Sat Feb 02 2019 Fedora Release Engineering <releng@fedoraproject.org> - 5.0.2-5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
 
