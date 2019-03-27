@@ -99,6 +99,7 @@ ideal for real-time web services.
 %{?with_python2:%py2_install}
 
 %check
+export ASYNC_TEST_TIMEOUT=10
 %{__python3} -m tornado.test.runtests --verbose
 %{?with_python2:%{__python2} -m tornado.test.runtests --verbose}
 
