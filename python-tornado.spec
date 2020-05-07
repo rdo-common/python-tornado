@@ -1,8 +1,10 @@
 # python2 is not available on RHEL > 7
 %if 0%{?rhel} > 7
 %bcond_with python2
+%bcond_without python3
 %else
 %bcond_without python2
+%bcond_with python3
 %endif
 
 %global srcname tornado
@@ -29,8 +31,10 @@ BuildRequires:  python2-backports_abc
 BuildRequires:  python2-singledispatch
 BuildRequires:  python2-futures
 %endif # with python2
+%if %{with python3}
 BuildRequires:  python%{python3_pkgversion}-setuptools
 BuildRequires:  python%{python3_pkgversion}-devel
+%endif # with python2
 
 %description
 Tornado is an open source version of the scalable, non-blocking web
@@ -62,13 +66,16 @@ ideal for real-time web services.
 
 %package doc
 Summary:        Examples for python-tornado
+%if %{with python3}
 Obsoletes:      python%{python3_pkgversion}-%{srcname}-doc < 4.2.1-3
 Provides:       python%{python3_pkgversion}-%{srcname}-doc = %{version}-%{release}
+%endif
 
 %description doc
 Tornado is an open source version of the scalable, non-blocking web
 server and and tools. This package contains some example applications.
 
+%if %{with python3}
 %package -n python%{python3_pkgversion}-%{srcname}
 Summary:        Scalable, non-blocking web server and tools
 %{?python_provide:%python_provide python%{python3_pkgversion}-%{srcname}}
@@ -83,6 +90,7 @@ The framework is distinct from most mainstream web server frameworks
 reasonably fast. Because it is non-blocking and uses epoll, it can
 handle thousands of simultaneous standing connections, which means it is
 ideal for real-time web services.
+%endif
 
 %prep 
 %autosetup -p1 -n %{srcname}-%{version}
@@ -90,17 +98,23 @@ ideal for real-time web services.
 %{__sed} -i.orig -e '/^#!\//, 1d' *py tornado/*.py tornado/*/*.py
 
 %build
+%if %{with python3}
 %py3_build
+%endif
 %{?with_python2:%py2_build}
 
 
 %install
+%if %{with python3}
 %py3_install
+%endif
 %{?with_python2:%py2_install}
 
 %check
 export ASYNC_TEST_TIMEOUT=10
+%if %{with python3}
 %{__python3} -m tornado.test.runtests --verbose
+%endif
 %{?with_python2:%{__python2} -m tornado.test.runtests --verbose}
 
 %if %{with python2}
@@ -114,11 +128,13 @@ export ASYNC_TEST_TIMEOUT=10
 %files doc
 %doc demos
 
+%if %{with python3}
 %files -n python%{python3_pkgversion}-%{srcname}
 %license LICENSE
 %doc README.rst
 %{python3_sitearch}/%{srcname}/
 %{python3_sitearch}/%{srcname}-%{version}-*.egg-info
+%endif
 
 
 %changelog
